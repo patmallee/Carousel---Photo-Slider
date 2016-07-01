@@ -71,6 +71,10 @@ img {
 	left: 5px;
 }
 
+.hovered-arrow {
+	background-color: rgba(200,200,200,.9)
+}
+
 #quick-jump {
 	display: inline-block;
 	border: none;
