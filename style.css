@@ -1,0 +1,103 @@
+div {
+	/*border: 2px solid green;*/
+}
+
+#stage {
+	height: 400px;
+	width: 400px;
+	margin: auto;
+	overflow: hidden;
+	position: relative;
+}
+
+#photostrip {
+	height: 400px;
+	width: 2000px;
+	position: relative;
+	left: -400px;
+}
+
+table {
+	border: none;
+}
+
+td {
+	background-color: black;
+	width: 400px;
+	height: 400px;
+	margin: 0;
+	padding: 0;
+}
+
+img {
+	max-height: 100%;
+	max-width: 100%;
+	display: block;
+	margin: auto;
+}
+
+.arrow {
+	width: 20px;
+	height: 40px;
+	background-color: rgba(200,200,200,.45);
+	z-index: 2;
+	position: absolute;
+	top: 180px;
+}
+
+#leftarrow {
+	left: 30px;
+}
+
+#left-triangle {
+	border-right: 10px solid rgba(255,255,255,.55);
+	border-top: 15px solid transparent;
+	border-bottom: 15px solid transparent;
+	position: relative;
+	top: 5px;
+	right: 5px;
+}
+
+#rightarrow {
+	left: 350px;
+}
+
+#right-triangle {
+	border-left: 10px solid rgba(255,255,255,.55);
+	border-top: 15px solid transparent;
+	border-bottom: 15px solid transparent;
+	position: relative;
+	top: 5px;
+	left: 5px;
+}
+
+#quick-jump {
+	display: inline-block;
+	border: none;
+	padding: 4px 0 0 0;
+}
+
+.quick-button {
+	border-radius: 16px;
+	height: 16px;
+	width: 16px;
+	display: inline-block;
+	margin: 0 2px;
+	border: 2px solid blue;
+	background-color: rgba(180,180,255,.35)
+}
+
+
+/* UTILITIES */
+
+.centering-wrapper {
+	text-align: center;
+}
+
+.vertical-align {
+	display: inline-block;
+	height: 100%;
+	width: 0px;
+	vertical-align: middle;
+}
+
