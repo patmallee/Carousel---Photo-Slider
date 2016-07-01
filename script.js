@@ -53,6 +53,12 @@ function updateNavigation(newPhotoID) {
 	$('#button' + currentPhotoID).toggleClass('selected-button');
 }
 
+function quickNav(navSelection) {
+	photostrip.animate({ left: navSelection[0].dataset.position });
+	updateNavigation( navSelection[0].dataset.index );
+	resetTimer();
+}
+
 $().ready(function() {
 	$('#leftarrow').click(moveLeft);
 	$('#rightarrow').click(moveRight);
@@ -64,28 +70,18 @@ $().ready(function() {
 	});
 
 	$('#button1').click(function(){
-		photostrip.animate({ left: 0 });
-		updateNavigation(1);
-		resetTimer();
+		quickNav( $(this) );
 	});
 	$('#button2').click(function(){
-		photostrip.animate({ left: "-400px" });
-		updateNavigation(2);
-		resetTimer();
+		quickNav( $(this) );
 	});
 	$('#button3').click(function(){
-		photostrip.animate({ left: "-800px" });
-		updateNavigation(3);
-		resetTimer();
+		quickNav( $(this) );
 	});
 	$('#button4').click(function(){
-		photostrip.animate({ left: "-1200px" });
-		updateNavigation(4);
-		resetTimer();
+		quickNav( $(this) );
 	});
 	$('#button5').click(function(){
-		photostrip.animate({ left: "-1600px" });
-		updateNavigation(5);
-		resetTimer();
+		quickNav( $(this) );
 	});
 });
