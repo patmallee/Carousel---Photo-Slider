@@ -87,6 +87,26 @@ img {
 	background-color: rgba(200,200,200,.9)
 }
 
+/* PREVIEWS */
+
+.preview {
+	height: 40px;
+	width: 40px;
+	z-index: 2;
+	position: absolute;
+	top: 240px;
+	background-color: red;
+	display: none;
+}
+
+#leftpreview {
+	left: 30px;
+}
+
+#rightpreview {
+	left: 330px;
+}
+
 /* QUICK NAV */
 
 #quick-jump {
@@ -107,7 +127,7 @@ img {
 }
 
 .selected-button {
-	background-color: rgba(255,255,255,.85);
+	background-color: rgba(255,255,255,.90);
 }
 
 /* UTILITIES */

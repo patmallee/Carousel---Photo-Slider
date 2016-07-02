@@ -1,10 +1,7 @@
 var photostrip = $('#photostrip');
 var currentPhotoID = 1;
 var timer = setInterval(moveRight, 5000);
-
-function hoverExpand() {
-	this.animate({ width: "+=10px" });
-};
+var fadeSpeed = 300;
 
 function resetTimer() {
 	clearInterval(timer);
@@ -59,14 +56,41 @@ function quickNav(navSelection) {
 	resetTimer();
 }
 
+function fadeInPreview(preview) {
+	preview.fadeIn(fadeSpeed);
+	preview.animate(
+		{ top: "-=10" },
+		{ duration: fadeSpeed, queue: false }
+	);
+}
+
+function fadeOutPreview(preview) {
+	preview.fadeOut(fadeSpeed);
+	preview.animate(
+		{ top: "+=10" },
+		{ duration: fadeSpeed, queue: false }
+	);
+}
+
 $().ready(function() {
 	$('#leftarrow').click(moveLeft);
 	$('#rightarrow').click(moveRight);
+	
 	$('#leftarrow').hover(function() {
 		$(this).toggleClass('hovered-arrow');
+		fadeInPreview( $('#leftpreview') );
+	}, function() {
+		$(this).toggleClass('hovered-arrow');
+		fadeOutPreview( $('#leftpreview') );
 	});
+
 	$('#rightarrow').hover(function() {
 		$(this).toggleClass('hovered-arrow');
+		fadeInPreview( $('#rightpreview') );
+	}, function() {
+		$(this).toggleClass('hovered-arrow');
+		$('#rightpreview').fadeOut(fadeSpeed);
+		fadeOutPreview( $('#rightpreview') );
 	});
 
 	$('#button1').click(function(){
