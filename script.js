@@ -85,6 +85,7 @@ function fadeInPreview(preview, direction) {
 		{ top: "-=10" },
 		{ duration: fadeSpeed, queue: false }
 	);
+	console.log("fadein");
 }
 
 function fadeOutPreview(preview) {
@@ -93,11 +94,24 @@ function fadeOutPreview(preview) {
 		{ top: "+=10" },
 		{ duration: fadeSpeed, queue: false }
 	);
+	console.log("fadeout");
 }
 
 $().ready(function() {
-	$('#leftarrow').click(moveLeft);
-	$('#rightarrow').click(moveRight);
+	$('#leftarrow').click( function() {
+		fadeOutPreview( $('#leftpreview') );
+		moveLeft();
+		setTimeout(function() {
+			fadeInPreview( $('#leftpreview'), 'left' );
+		}, 400);
+	});
+	$('#rightarrow').click( function() {
+		fadeOutPreview( $('#rightpreview') );
+		moveRight();
+		setTimeout(function() {
+			fadeInPreview( $('#rightpreview'), 'right' );
+		}, 400);
+	});
 	
 	$('#leftarrow').hover(function() {
 		$(this).toggleClass('hovered-arrow');
