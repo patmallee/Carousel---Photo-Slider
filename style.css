@@ -95,8 +95,11 @@ img {
 	z-index: 2;
 	position: absolute;
 	top: 240px;
-	background-color: red;
 	display: none;
+}
+
+.preview img {
+	box-shadow: 0 0 9px 1px #ddd;
 }
 
 #leftpreview {

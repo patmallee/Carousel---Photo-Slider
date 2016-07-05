@@ -1,5 +1,7 @@
 var photostrip = $('#photostrip');
 var currentPhotoID = 1;
+var leftPreviewID = 5;
+var rightPreviewID = 2;
 var timer = setInterval(moveRight, 5000);
 var fadeSpeed = 300;
 
@@ -52,11 +54,32 @@ function updateNavigation(newPhotoID) {
 
 function quickNav(navSelection) {
 	photostrip.animate({ left: navSelection[0].dataset.position });
-	updateNavigation( navSelection[0].dataset.index );
+	updateNavigation( parseInt(navSelection[0].dataset.index) );
 	resetTimer();
 }
 
-function fadeInPreview(preview) {
+function fadeInPreview(preview, direction) {
+
+	var previewID = currentPhotoID;
+
+	if (direction === 'left') {
+		if (currentPhotoID <= 1) {
+			previewID = 5;
+		} else {
+			previewID -= 1
+		}
+	} else if (direction === 'right') {
+		if (currentPhotoID >= 5) {
+			previewID = 1;
+		} else {
+			previewID += 1;
+		}
+
+	}
+
+	var previewImage = $('#photo' + previewID).html();
+
+	preview.html(previewImage)
 	preview.fadeIn(fadeSpeed);
 	preview.animate(
 		{ top: "-=10" },
@@ -78,7 +101,7 @@ $().ready(function() {
 	
 	$('#leftarrow').hover(function() {
 		$(this).toggleClass('hovered-arrow');
-		fadeInPreview( $('#leftpreview') );
+		fadeInPreview( $('#leftpreview'), 'left' );
 	}, function() {
 		$(this).toggleClass('hovered-arrow');
 		fadeOutPreview( $('#leftpreview') );
@@ -86,7 +109,7 @@ $().ready(function() {
 
 	$('#rightarrow').hover(function() {
 		$(this).toggleClass('hovered-arrow');
-		fadeInPreview( $('#rightpreview') );
+		fadeInPreview( $('#rightpreview'), 'right' );
 	}, function() {
 		$(this).toggleClass('hovered-arrow');
 		$('#rightpreview').fadeOut(fadeSpeed);
