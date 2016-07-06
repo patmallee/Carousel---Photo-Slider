@@ -1,8 +1,6 @@
 var photostrip = $('#photostrip');
 var currentPhotoID = 1;
-var leftPreviewID = 5;
-var rightPreviewID = 2;
-var timer = setInterval(changeSliderState, 5000);
+/*var timer = setInterval(changeSliderState, 5000);*/
 var fadeSpeed = 300;
 
 function resetTimer() {
@@ -10,32 +8,38 @@ function resetTimer() {
 	timer = setInterval(changeSliderState, 5000);
 }
 
-function changeSliderState(input) {
-
-	/* calculate ID of new photo to be displayed */
+function calculatePhotoID(input) {
 	if (input === 'left') {
-		
+
 		if (currentPhotoID <= 1) {
-			var newPhotoID = 5;
+			return 5;
 		} else {
-			var newPhotoID = currentPhotoID - 1;
+			return currentPhotoID - 1;
 		}
 	
 	} else if (input === 'right' || input === undefined) {
 
 		if (currentPhotoID >= 5) {
-			var newPhotoID = 1;
+			return 1;
 		} else {
-			var newPhotoID = currentPhotoID + 1;
+			return currentPhotoID + 1;
 		}
 	
 	} else {
-		var newPhotoID = input;
+		return input;
 	}
+}
+
+function changeSliderState(input) {
+	/* calculate ID of new photo to be displayed */
+	var newPhotoID = calculatePhotoID(input);
 
 	/* Update visual elements */
 	photostrip.animate({ left: newPhotoID * -400 + 400});
 	updateQuickNavButtons(newPhotoID);
+
+	/* Update currentPhotoID for calculation purposes */
+	currentPhotoID = newPhotoID;
 
 	/* reset timer variable to prevent similarly-timed 
 	clicks/auto-moves */
@@ -43,30 +47,13 @@ function changeSliderState(input) {
 }
 
 function updateQuickNavButtons(newPhotoID) {
-	$('#button' + currentPhotoID).toggleClass('selected-button');
-	currentPhotoID = newPhotoID;
-	$('#button' + currentPhotoID).toggleClass('selected-button');
+	$('.selected-button').toggleClass('selected-button');
+	$('#button' + newPhotoID).toggleClass('selected-button');
 }
 
 function fadeInPreview(preview, direction) {
 
-	var previewID = currentPhotoID;
-
-	if (direction === 'left') {
-		if (currentPhotoID <= 1) {
-			previewID = 5;
-		} else {
-			previewID -= 1
-		}
-	} else if (direction === 'right') {
-		if (currentPhotoID >= 5) {
-			previewID = 1;
-		} else {
-			previewID += 1;
-		}
-
-	}
-
+	var previewID = calculatePhotoID(direction);
 	var previewImage = $('#photo' + previewID).html();
 
 	preview.html(previewImage)
@@ -91,7 +78,7 @@ $().ready(function() {
 		changeSliderState('left');
 		setTimeout(function() {
 			fadeInPreview( $('#leftpreview'), 'left' )
-		}, 400);
+		}, fadeSpeed);
 	});
 
 	$('#rightarrow').click( function() {
@@ -99,7 +86,7 @@ $().ready(function() {
 		changeSliderState('right');
 		setTimeout(function() {
 			fadeInPreview( $('#rightpreview'), 'right' )
-		}, 400);
+		}, fadeSpeed);
 	});
 	
 	$('#leftarrow').hover(function() {
@@ -121,7 +108,7 @@ $().ready(function() {
 
 	$('#quick-jump').click(function(e) {
 		if ( e.target && e.target.matches("div.quick-button") ) {
-			changeSliderState( e.target.dataset.index );
+			changeSliderState( parseInt(e.target.dataset.index) );
 		}
 	});
 
