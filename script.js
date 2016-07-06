@@ -2,60 +2,50 @@ var photostrip = $('#photostrip');
 var currentPhotoID = 1;
 var leftPreviewID = 5;
 var rightPreviewID = 2;
-var timer = setInterval(moveRight, 5000);
+var timer = setInterval(changeSliderState, 5000);
 var fadeSpeed = 300;
 
 function resetTimer() {
 	clearInterval(timer);
-	timer = setInterval(moveRight, 5000);
+	timer = setInterval(changeSliderState, 5000);
 }
 
-function moveRight() {
-	if (photostrip.css("left") === "-1600px") {
-		photostrip.animate({ left: 0 });
-	} else {
-		photostrip.animate({ left: "-=400" });
-	}
-	updateNavigation();
-	resetTimer();
-};
+function changeSliderState(input) {
 
-function moveLeft() {
-	if (photostrip.css("left") === "0px") {
-		photostrip.animate({ left: "-1600px" });
-	} else {
-		photostrip.animate({ left: "+=400" });
-	}
-	updateNavigation(-1);
-	resetTimer();
-};
-
-function updateNavigation(newPhotoID) {
-	if (typeof newPhotoID === 'undefined') {
-		if (currentPhotoID >= 5) {
-			newPhotoID = 1;
-		} else {
-			newPhotoID = currentPhotoID + 1;
-		}
-	} else if (newPhotoID === -1) {
-		/* Negative 1 signifies that photostrip should move 1
-		image in reverse order */
+	/* calculate ID of new photo to be displayed */
+	if (input === 'left') {
+		
 		if (currentPhotoID <= 1) {
-			newPhotoID = 5;
+			var newPhotoID = 5;
 		} else {
-			newPhotoID = currentPhotoID - 1;
+			var newPhotoID = currentPhotoID - 1;
 		}
-	};
+	
+	} else if (input === 'right' || input === undefined) {
 
+		if (currentPhotoID >= 5) {
+			var newPhotoID = 1;
+		} else {
+			var newPhotoID = currentPhotoID + 1;
+		}
+	
+	} else {
+		var newPhotoID = input;
+	}
+
+	/* Update visual elements */
+	photostrip.animate({ left: newPhotoID * -400 + 400});
+	updateQuickNavButtons(newPhotoID);
+
+	/* reset timer variable to prevent similarly-timed 
+	clicks/auto-moves */
+	resetTimer();
+}
+
+function updateQuickNavButtons(newPhotoID) {
 	$('#button' + currentPhotoID).toggleClass('selected-button');
 	currentPhotoID = newPhotoID;
 	$('#button' + currentPhotoID).toggleClass('selected-button');
-}
-
-function quickNav(navSelection) {
-	photostrip.animate({ left: navSelection[0].dataset.position });
-	updateNavigation( parseInt(navSelection[0].dataset.index) );
-	resetTimer();
 }
 
 function fadeInPreview(preview, direction) {
@@ -85,7 +75,6 @@ function fadeInPreview(preview, direction) {
 		{ top: "-=10" },
 		{ duration: fadeSpeed, queue: false }
 	);
-	console.log("fadein");
 }
 
 function fadeOutPreview(preview) {
@@ -94,22 +83,22 @@ function fadeOutPreview(preview) {
 		{ top: "+=10" },
 		{ duration: fadeSpeed, queue: false }
 	);
-	console.log("fadeout");
 }
 
 $().ready(function() {
 	$('#leftarrow').click( function() {
 		fadeOutPreview( $('#leftpreview') );
-		moveLeft();
+		changeSliderState('left');
 		setTimeout(function() {
-			fadeInPreview( $('#leftpreview'), 'left' );
+			fadeInPreview( $('#leftpreview'), 'left' )
 		}, 400);
 	});
+
 	$('#rightarrow').click( function() {
 		fadeOutPreview( $('#rightpreview') );
-		moveRight();
+		changeSliderState('right');
 		setTimeout(function() {
-			fadeInPreview( $('#rightpreview'), 'right' );
+			fadeInPreview( $('#rightpreview'), 'right' )
 		}, 400);
 	});
 	
@@ -130,19 +119,10 @@ $().ready(function() {
 		fadeOutPreview( $('#rightpreview') );
 	});
 
-	$('#button1').click(function(){
-		quickNav( $(this) );
+	$('#quick-jump').click(function(e) {
+		if ( e.target && e.target.matches("div.quick-button") ) {
+			changeSliderState( e.target.dataset.index );
+		}
 	});
-	$('#button2').click(function(){
-		quickNav( $(this) );
-	});
-	$('#button3').click(function(){
-		quickNav( $(this) );
-	});
-	$('#button4').click(function(){
-		quickNav( $(this) );
-	});
-	$('#button5').click(function(){
-		quickNav( $(this) );
-	});
+
 });
