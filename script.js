@@ -1,6 +1,6 @@
 var photostrip = $('#photostrip');
 var currentPhotoID = 1;
-/*var timer = setInterval(changeSliderState, 5000);*/
+var timer = setInterval(changeSliderState, 5000);
 var fadeSpeed = 300;
 
 function resetTimer() {
