@@ -1,32 +1,33 @@
-var photostrip = $('#photostrip');
-var currentPhotoID = 1;
-var timer = setInterval(changeSliderState, 5000);
-var fadeSpeed = 300;
+var PHOTOSTRIP = $('#photostrip');
+var FADESPEED = 300;
+var STAGEWIDTH = 400;
+var TIMERDURATION = 5000;
+
+var timer = setInterval(changeSliderState, TIMERDURATION);
+var currentPhotoID = 0;
 
 function resetTimer() {
 	clearInterval(timer);
-	timer = setInterval(changeSliderState, 5000);
+	timer = setInterval(changeSliderState, TIMERDURATION);
 }
 
 function calculatePhotoID(input) {
 	if (input === 'left') {
 
-		if (currentPhotoID <= 1) {
-			return 5;
+		if (currentPhotoID - 1 < 0) {
+			return 4;
 		} else {
-			return currentPhotoID - 1;
+			return (currentPhotoID - 1) % 5;
 		}
-	
-	} else if (input === 'right' || input === undefined) {
 
-		if (currentPhotoID >= 5) {
-			return 1;
-		} else {
-			return currentPhotoID + 1;
-		}
+	} else if (input === 'right' || input === undefined) {
+	
+		return (currentPhotoID + 1) % 5;
 	
 	} else {
+
 		return input;
+	
 	}
 }
 
@@ -35,7 +36,7 @@ function changeSliderState(input) {
 	var newPhotoID = calculatePhotoID(input);
 
 	/* Update visual elements */
-	photostrip.animate({ left: newPhotoID * -400 + 400});
+	PHOTOSTRIP.animate( {left: newPhotoID * -STAGEWIDTH} );
 	updateQuickNavButtons(newPhotoID);
 
 	/* Update currentPhotoID for calculation purposes */
@@ -57,20 +58,21 @@ function fadeInPreview(preview, direction) {
 	var previewImage = $('#photo' + previewID).html();
 
 	preview.html(previewImage)
-	preview.fadeIn(fadeSpeed);
+	preview.fadeIn(FADESPEED);
 	preview.animate(
 		{ top: "-=10" },
-		{ duration: fadeSpeed, queue: false }
+		{ duration: FADESPEED, queue: false }
 	);
 }
 
 function fadeOutPreview(preview) {
-	preview.fadeOut(fadeSpeed);
+	preview.fadeOut(FADESPEED);
 	preview.animate(
 		{ top: "+=10" },
-		{ duration: fadeSpeed, queue: false }
+		{ duration: FADESPEED, queue: false }
 	);
 }
+
 
 $().ready(function() {
 	$('#leftarrow').click( function() {
@@ -78,7 +80,7 @@ $().ready(function() {
 		changeSliderState('left');
 		setTimeout(function() {
 			fadeInPreview( $('#leftpreview'), 'left' )
-		}, fadeSpeed);
+		}, FADESPEED);
 	});
 
 	$('#rightarrow').click( function() {
@@ -86,7 +88,7 @@ $().ready(function() {
 		changeSliderState('right');
 		setTimeout(function() {
 			fadeInPreview( $('#rightpreview'), 'right' )
-		}, fadeSpeed);
+		}, FADESPEED);
 	});
 	
 	$('#leftarrow').hover(function() {
@@ -102,7 +104,7 @@ $().ready(function() {
 		fadeInPreview( $('#rightpreview'), 'right' );
 	}, function() {
 		$(this).toggleClass('hovered-arrow');
-		$('#rightpreview').fadeOut(fadeSpeed);
+		$('#rightpreview').fadeOut(FADESPEED);
 		fadeOutPreview( $('#rightpreview') );
 	});
 
@@ -111,5 +113,4 @@ $().ready(function() {
 			changeSliderState( parseInt(e.target.dataset.index) );
 		}
 	});
-
 });
